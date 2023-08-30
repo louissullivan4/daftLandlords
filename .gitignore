@@ -1,2 +1,9 @@
 .venv
 .vscode
+config.py
+test.py
+/__pycache__
+
+# Temp
+discord_interaction.py
+daftLandlords.db
