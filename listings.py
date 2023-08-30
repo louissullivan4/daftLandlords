@@ -3,10 +3,10 @@
 import requests
 from bs4 import BeautifulSoup
 from pprint import pprint
-
-
+import datetime as dt
 
 def get_listings():
+    final_listings_dict = {}
     listings_html = requests.get("https://www.daft.ie/property-for-rent/cork-city?showMap=false&sort=priceAsc")
     soup = BeautifulSoup(listings_html.text, 'html.parser')
     listing_count = int(soup.select('h1[data-testid="search-h1"]')[0].get_text().split()[0])
@@ -34,7 +34,11 @@ def get_listings():
                 temp_dict["url"] = "https://www.daft.ie" + house.select('a')[0]['href']    
                 temp_list.append(temp_dict)
             total_listings += temp_list
-    # pprint(total_listings)
-    return total_listings
+    final_listings_dict["listing_count"] = len(total_listings)
+    final_listings_dict["listings"] = total_listings
+    final_listings_dict["date_retrieved"] = dt.datetime.now().strftime("%d/%m/%Y")
+    final_listings_dict["time_retrieved"] = dt.datetime.now().strftime("%H:%M:%S")
+    # pprint(final_listings_dict)
+    return final_listings_dict
  
-# get_listings()
+get_listings()
