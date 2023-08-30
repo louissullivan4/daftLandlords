@@ -1,5 +1,6 @@
 import aiohttp
 import asyncio
+import time
 from discord import Webhook
 
 from listings import get_listings
@@ -29,6 +30,24 @@ def listing_event():
         if listing["id"] not in existing_ids:
             db_insert_listings(listing, scrapes_id)
             asyncio.run(send_listing(listing))
-    print("done")
+    print("Listing event complete")
 
-listing_event()
+def run_scraper_periodically():
+    cycles = 0
+    while True:
+        listing_event()
+        cycles += 1
+        time.sleep(300)
+    return cycles 
+
+if __name__ == "__main__":
+    "Running scraper every 5 minutes"
+    # track how long program runs minutes
+    start_time = time.time()    
+    print("Starting scraper...")
+    number_cycles = run_scraper_periodically()
+    print("--- %s minutes ---" % ((time.time() - start_time)/60))
+    print(f"Number of cycles: {number_cycles}")
+    print("Scraper exited...")
+
+    
