@@ -28,6 +28,20 @@ def create_db():
     db_connection.commit()
     db_connection.close()
 
+def db_get_all_listings():
+    db_connection = sqlite3.connect('daftLandlords.db')
+    cursor = db_connection.cursor()
+
+    select_daftLandlords_Listings_query = '''
+    SELECT *
+    FROM daftLandlords_Listings
+    '''
+    cursor.execute(select_daftLandlords_Listings_query)
+    listings = cursor.fetchall()
+
+    db_connection.close()
+    return listings
+
 def db_select_existing_listings():
     db_connection = sqlite3.connect('daftLandlords.db')
     cursor = db_connection.cursor()
@@ -111,7 +125,3 @@ def db_remove_all_data():
     cursor.execute(delete_daftLandlords_seq)
     db_connection.commit()
     db_connection.close()
-
-# db_remove_listing_id("5387143")
-# db_remove_scrape_id(1)
-# db_remove_all_data()

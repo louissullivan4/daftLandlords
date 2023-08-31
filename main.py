@@ -28,26 +28,27 @@ def listing_event():
     scrapes_id = db_insert_scrapes(listings_dict)
     for listing in listings_dict["listings"]:
         if listing["id"] not in existing_ids:
+            print(f"New listing found: {listing['id']}")
             db_insert_listings(listing, scrapes_id)
             asyncio.run(send_listing(listing))
-    print("Listing event complete")
+    print("Listing event complete!")
 
 def run_scraper_periodically():
-    cycles = 0
     while True:
         listing_event()
-        cycles += 1
         time.sleep(300)
-    return cycles 
 
 if __name__ == "__main__":
-    "Running scraper every 5 minutes"
-    # track how long program runs minutes
-    start_time = time.time()    
-    print("Starting scraper...")
-    number_cycles = run_scraper_periodically()
-    print("--- %s minutes ---" % ((time.time() - start_time)/60))
-    print(f"Number of cycles: {number_cycles}")
-    print("Scraper exited...")
+    start_time = time.time()
+    delete_time = time.time()
+    
+    if time.time() - delete_time > 43200:
+        print("12 hours have passed, deleting all listings and scrapes...")
+        db_remove_all_data()
+        delete_time = time.time()
+
+    print("Starting scraper at ", time.strftime("%H:%M:%S", time.localtime(start_time)))
+    run_scraper_periodically()
+    print("Scraper exited at ", time.strftime("%H:%M:%S", time.localtime(time.time())))
 
     
