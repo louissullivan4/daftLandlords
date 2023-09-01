@@ -5,10 +5,11 @@ from discord import Webhook
 
 from listings import get_listings
 from db_interaction import *
-from config import WEBHOOK_URL
+# from config import WEBHOOK_URL
 
 create_db()
 
+WEBHOOK_URL = 'https://discord.com/api/webhooks/1146434191546921074/OPHgwupeGo9kE--WXnFpO1wQJsOhfkdhoTBRRs6_4Z9Evt_TfjjmDq8YCvnJ5bNj193D' 
 async def send_listing(listing):
     async with aiohttp.ClientSession() as session:
         webhook = Webhook.from_url(WEBHOOK_URL, session=session)
