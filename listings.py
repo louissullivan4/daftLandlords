@@ -4,6 +4,9 @@ import requests
 from bs4 import BeautifulSoup
 from pprint import pprint
 import datetime as dt
+import asyncio
+from discord import Webhook
+from logs import *
 
 def get_listings():
     final_listings_dict = {}
@@ -40,10 +43,9 @@ def get_listings():
         final_listings_dict["listings"] = total_listings
         final_listings_dict["date_retrieved"] = dt.datetime.now().strftime("%d/%m/%Y")
         final_listings_dict["time_retrieved"] = dt.datetime.now().strftime("%H:%M:%S")
-        pprint(final_listings_dict)
+        message_total_listings = f"""Total Scraped Listings: {final_listings_dict["listing_count"]}"""
+        asyncio.run(send_log_discord(message_total_listings, "INFO"))
     except Exception as e:
-        print("ERROR: ", e)
+        asyncio.run(send_log_discord(e, "ERROR"))
         return final_listings_dict
     return final_listings_dict
- 
-get_listings()
