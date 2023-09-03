@@ -33,26 +33,24 @@ def listing_event():
 
 
 def run_scraper_periodically():
+    start_time = time.time()
     while True:
+        if (time.time() - start_time) > 43200:
+            db_remove_all_data()
+            message = f"""Database cleared at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
+            asyncio.run(send_log_discord(message, "DELETE"))
+            start_time = time.time()
         message = f"""Listing Event started at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
         asyncio.run(send_log_discord(message, "INFO"))
         listing_event()
         message = f"""Listing Event completed at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
         asyncio.run(send_log_discord(message, "INFO"))
-        time.sleep(60)
+        time.sleep(20)
 
 
 if __name__ == "__main__":
     try:
         try:
-            start_time = time.time()
-            delete_time = time.time()
-            # if time.time() - delete_time > 43200:
-            if time.time() - delete_time > 10:
-                db_remove_all_data()
-                message = f"""Database cleared at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
-                asyncio.run(send_log_discord(message, "DELETE"))
-                delete_time = time.time()
             message = f"""Bot started at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
             asyncio.run(send_log_discord(message, "INFO"))
             run_scraper_periodically()
@@ -64,13 +62,3 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         message = f"""Bot stopped at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
         asyncio.run(send_log_discord(message, "STOP"))
-
-
-# start_time = time.time()
-#         delete_time = time.time()
-#         # if time.time() - delete_time > 43200:
-#             db_remove_all_data()
-#             message = f"""Database cleared at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
-#             asyncio.run(send_log_discord(message, "DELETE"))
-#             delete_time = time.time()
-#         message = f"""Bot started at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
