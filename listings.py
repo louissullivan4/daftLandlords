@@ -43,7 +43,7 @@ def get_listings():
         final_listings_dict["listings"] = total_listings
         final_listings_dict["date_retrieved"] = dt.datetime.now().strftime("%d/%m/%Y")
         final_listings_dict["time_retrieved"] = dt.datetime.now().strftime("%H:%M:%S")
-        message_total_listings = f"""Total Scraped Listings at {dt.datetime.now().strftime("%H:%M:%S")}: {len(total_listings)}"""
+        message_total_listings = f"""Total Scraped Listings at: {len(total_listings)}"""
         asyncio.run(send_log_discord(message_total_listings, "INFO"))
     except Exception as e:
         asyncio.run(send_log_discord(e, "ERROR"))
