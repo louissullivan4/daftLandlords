@@ -1,11 +1,8 @@
-# web scrape for listings on https://www.daft.ie/property-for-rent/cork-city?showMap=false&sort=priceAsc
-
 import requests
+from requests.adapters import HTTPAdapter, Retry
 from bs4 import BeautifulSoup
-from pprint import pprint
 import datetime as dt
 import asyncio
-from discord import Webhook
 from logs import *
 
 def get_listings():
@@ -20,7 +17,13 @@ def get_listings():
             if listing_count % 20 != 0:
                 pages += 1
             for page in range(pages):
-                page_html = requests.get(f"https://www.daft.ie/property-for-rent/cork-city?showMap=false&sort=priceAsc&pageSize=20&from={page*20}")
+                session = requests.Session()
+                retry = Retry(connect=3, backoff_factor=0.5)
+                adapter = HTTPAdapter(max_retries=retry)
+                session.mount('http://', adapter)
+                session.mount('https://', adapter)
+                url = (f"https://www.daft.ie/property-for-rent/cork-city?showMap=false&sort=priceAsc&pageSize=20&from={page*20}")
+                page_html = session.get(url)
                 soup = BeautifulSoup(page_html.text, 'html.parser')
                 listing_page = soup.select('ul[data-testid="results"] li')
                 temp_list = []
