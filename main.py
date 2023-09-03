@@ -40,11 +40,7 @@ def run_scraper_periodically():
             message = f"""Database cleared at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
             asyncio.run(send_log_discord(message, "DELETE"))
             start_time = time.time()
-        message = f"""Listing Event started at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
-        asyncio.run(send_log_discord(message, "INFO"))
         listing_event()
-        message = f"""Listing Event completed at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
-        asyncio.run(send_log_discord(message, "INFO"))
         time.sleep(20)
 
 
@@ -57,7 +53,7 @@ if __name__ == "__main__":
             message = f"""Bot stopped at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
             asyncio.run(send_log_discord(message, "INFO"))
         except Exception as e:
-            message = f"""ERROR (BOT HAS STOPPED): {e}"""
+            message = f"""{e}"""
             asyncio.run(send_log_discord(message, "ERROR"))
     except KeyboardInterrupt:
         message = f"""Bot stopped at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
