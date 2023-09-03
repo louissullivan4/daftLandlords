@@ -44,18 +44,33 @@ def run_scraper_periodically():
 
 if __name__ == "__main__":
     try:
-        start_time = time.time()
-        delete_time = time.time()
-        if time.time() - delete_time > 43200:
-            db_remove_all_data()
-            message = f"""Database cleared at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
-            asyncio.run(send_log_discord(message, "DELETE"))
+        try:
+            start_time = time.time()
             delete_time = time.time()
-        message = f"""Bot started at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
-        asyncio.run(send_log_discord(message, "INFO"))
-        run_scraper_periodically()
-        message = f"""Bot stopped at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
-        asyncio.run(send_log_discord(message, "INFO"))
+            # if time.time() - delete_time > 43200:
+            if time.time() - delete_time > 10:
+                db_remove_all_data()
+                message = f"""Database cleared at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
+                asyncio.run(send_log_discord(message, "DELETE"))
+                delete_time = time.time()
+            message = f"""Bot started at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
+            asyncio.run(send_log_discord(message, "INFO"))
+            run_scraper_periodically()
+            message = f"""Bot stopped at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
+            asyncio.run(send_log_discord(message, "INFO"))
+        except Exception as e:
+            message = f"""ERROR (BOT HAS STOPPED): {e}"""
+            asyncio.run(send_log_discord(message, "ERROR"))
     except KeyboardInterrupt:
         message = f"""Bot stopped at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
-        asyncio.run(send_log_discord(message, "INFO"))
+        asyncio.run(send_log_discord(message, "STOP"))
+
+
+# start_time = time.time()
+#         delete_time = time.time()
+#         # if time.time() - delete_time > 43200:
+#             db_remove_all_data()
+#             message = f"""Database cleared at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
+#             asyncio.run(send_log_discord(message, "DELETE"))
+#             delete_time = time.time()
+#         message = f"""Bot started at {time.strftime("%H:%M:%S", time.localtime(time.time()))}"""
