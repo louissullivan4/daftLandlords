@@ -30,6 +30,7 @@ def listing_event():
             new_listings += 1
     message = f"""Number New Listings: {new_listings}"""
     asyncio.run(send_log_discord(message, "INFO"))
+    print(message)
 
 
 def run_scraper_periodically():
@@ -39,6 +40,7 @@ def run_scraper_periodically():
             db_remove_all_data()
             message = f"""Database cleared!"""
             asyncio.run(send_log_discord(message, "DELETE"))
+            print(message)
             start_time = time.time()
         listing_event()
         time.sleep(20)
@@ -55,6 +57,7 @@ if __name__ == "__main__":
         except Exception as e:
             message = f"""{e}"""
             asyncio.run(send_log_discord(message, "ERROR"))
+            print(e)
     except KeyboardInterrupt:
         message = f"""Bot stopped"""
         asyncio.run(send_log_discord(message, "STOP"))

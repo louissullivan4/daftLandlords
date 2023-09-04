@@ -50,5 +50,6 @@ def get_listings():
         asyncio.run(send_log_discord(message_total_listings, "INFO"))
     except Exception as e:
         asyncio.run(send_log_discord(e, "ERROR"))
+        print(e)
         return final_listings_dict
     return final_listings_dict
