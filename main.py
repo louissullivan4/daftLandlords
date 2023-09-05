@@ -29,9 +29,10 @@ def listing_event():
                 db_insert_listings(listing, scrapes_id)
                 asyncio.run(send_listing(listing))
                 new_listings += 1
-        message = f"""Number New Listings: {new_listings}"""
-        asyncio.run(send_log_discord(message, "INFO"))
-        print(message)
+        if new_listings > 0:
+            message = f"""Number New Listings: {new_listings}"""
+            asyncio.run(send_log_discord(message, "INFO"))
+            print(message)
     except Exception as e:
         asyncio.run(send_log_discord(e, "ERROR"))
         print(e)
