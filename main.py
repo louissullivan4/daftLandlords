@@ -19,23 +19,28 @@ async def send_listing(listing):
         await webhook.send(message_struct, username='DaftLandlords')
 
 def listing_event():
-    listings_dict = get_listings()
-    existing_ids = db_select_existing_listings()
-    scrapes_id = db_insert_scrapes(listings_dict)
-    new_listings = 0
-    for listing in listings_dict["listings"]:
-        if listing["id"] not in existing_ids:
-            db_insert_listings(listing, scrapes_id)
-            asyncio.run(send_listing(listing))
-            new_listings += 1
-    message = f"""Number New Listings: {new_listings}"""
-    asyncio.run(send_log_discord(message, "INFO"))
-    print(message)
+    try:
+        listings_dict = get_listings()
+        existing_ids = db_select_existing_listings()
+        scrapes_id = db_insert_scrapes(listings_dict)
+        new_listings = 0
+        for listing in listings_dict["listings"]:
+            if listing["id"] not in existing_ids:
+                db_insert_listings(listing, scrapes_id)
+                asyncio.run(send_listing(listing))
+                new_listings += 1
+        message = f"""Number New Listings: {new_listings}"""
+        asyncio.run(send_log_discord(message, "INFO"))
+        print(message)
+    except Exception as e:
+        asyncio.run(send_log_discord(e, "ERROR"))
+        print(e)
+        
 
 
 def run_scraper_periodically():
     start_time = time.time()
-    while True:
+    while True:        
         if (time.time() - start_time) > 43200:
             db_remove_all_data()
             message = f"""Database cleared!"""
@@ -48,16 +53,11 @@ def run_scraper_periodically():
 
 if __name__ == "__main__":
     try:
-        try:
-            message = f"""Bot started"""
-            asyncio.run(send_log_discord(message, "INFO"))
-            run_scraper_periodically()
-            message = f"""Bot stopped"""
-            asyncio.run(send_log_discord(message, "INFO"))
-        except Exception as e:
-            message = f"""{e}"""
-            asyncio.run(send_log_discord(message, "ERROR"))
-            print(e)
+        message = f"""Bot started"""
+        asyncio.run(send_log_discord(message, "INFO"))
+        run_scraper_periodically()
+        message = f"""Bot stopped"""
+        asyncio.run(send_log_discord(message, "INFO"))
     except KeyboardInterrupt:
         message = f"""Bot stopped"""
         asyncio.run(send_log_discord(message, "STOP"))
