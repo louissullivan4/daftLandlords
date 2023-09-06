@@ -9,7 +9,7 @@ from logs import *
 
 create_db()
 
-WEBHOOK_URL = 'https://discord.com/api/webhooks/1146434191546921074/OPHgwupeGo9kE--WXnFpO1wQJsOhfkdhoTBRRs6_4Z9Evt_TfjjmDq8YCvnJ5bNj193D'
+WEBHOOK_URL = 'https://discord.com/api/webhooks/1146434183162503208/g7SZB51SkbYTqJXNqNALzIwFT15wrVqOv7sH3tnoyUo62u2G5Ml897EwdKlfM6WhRDaj'
 
 async def send_listing(listing):
     async with aiohttp.ClientSession() as session:
