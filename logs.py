@@ -2,7 +2,7 @@ import datetime as dt
 import aiohttp
 from discord import Webhook
 
-WEBHOOK_URL = 'https://discord.com/api/webhooks/1147654109789437962/PYjCLKlzWPYhuNcrmqlRNPG91tsfUaiC8WWJVN4auXSxs_qsowkxijklxYI_0SM5fPtN'
+WEBHOOK_URL = 'https://discord.com/api/webhooks/1147654103594438776/EYJmZqC2dqYqCRZJK-i7q89NdiKMtsFE3yy7l6kX9NxcXWN70jToqvp5yXLTaZ812SAC'
 
 async def send_log_discord(message, type_msg):
     async with aiohttp.ClientSession() as session:
