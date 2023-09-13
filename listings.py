@@ -29,18 +29,22 @@ def get_listings():
                 temp_list = []
                 for house in listing_page:
                     temp_dict = {}
-                    if house.select('a') != [] or None:
-                        temp_dict["id"] = house.select('a')[0]['href'].split('/')[-1]
-                        temp_dict["address"] = house.select('h2[data-testid="address"]')[0].text
-                        temp_dict["price"] = house.select('div[data-testid="price"]')[0].text
-                        bed_info = house.select('div[data-testid="card-info"] p[data-testid="beds"]')
-                        temp_dict["beds"] = bed_info[0].text.split(' ')[0] if bed_info else "n/a"
-                        bath_info = house.select('div[data-testid="card-info"] p[data-testid="baths"]')
-                        temp_dict["baths"] = bath_info[0].text.split(' ')[0] if bath_info else "n/a"
-                        property_type = house.select('div[data-testid="card-info"] p[data-testid="property-type"]')
-                        temp_dict["property_type"] = property_type[0].text if property_type else "n/a"
-                        temp_dict["url"] = "https://www.daft.ie" + house.select('a')[0]['href']    
-                        temp_list.append(temp_dict)
+                    try:
+                        house.select('a')[0]['href']
+                        if house.select('a') != [] or None or " ":
+                            temp_dict["id"] = house.select('a')[0]['href'].split('/')[-1]
+                            temp_dict["address"] = house.select('h2[data-testid="address"]')[0].text
+                            temp_dict["price"] = house.select('div[data-testid="price"]')[0].text
+                            bed_info = house.select('div[data-testid="card-info"] p[data-testid="beds"]')
+                            temp_dict["beds"] = bed_info[0].text.split(' ')[0] if bed_info else "n/a"
+                            bath_info = house.select('div[data-testid="card-info"] p[data-testid="baths"]')
+                            temp_dict["baths"] = bath_info[0].text.split(' ')[0] if bath_info else "n/a"
+                            property_type = house.select('div[data-testid="card-info"] p[data-testid="property-type"]')
+                            temp_dict["property_type"] = property_type[0].text if property_type else "n/a"
+                            temp_dict["url"] = "https://www.daft.ie" + house.select('a')[0]['href']    
+                            temp_list.append(temp_dict)
+                    except:
+                        continue
                 total_listings += temp_list
         final_listings_dict["listing_count"] = len(total_listings)
         final_listings_dict["listings"] = total_listings
